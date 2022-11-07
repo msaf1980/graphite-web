@@ -1235,7 +1235,8 @@ function selectRelativeTime() {
     allowBlank: false,
     regex: /^\d+$/,
     regexText: 'Please enter a number',
-    value: TimeRange.relativeStartQuantity
+    value: TimeRange.relativeStartQuantity,
+    // stripCharsRe  : new RegExp('[<>]', 'g') // TODO don't work, but a good way
   });
 
   var unitField = new Ext.form.ComboBox({
@@ -1247,7 +1248,8 @@ function selectRelativeTime() {
     allowBlank: false,
     forceSelection: true,
     store: ['minutes', 'hours', 'days', 'weeks', 'months'],
-    value: TimeRange.relativeStartUnits
+    value: TimeRange.relativeStartUnits,
+    // stripCharsRe  : new RegExp('[<>]', 'g') // TODO don't work, but a good way
   });
 
   var untilQuantityField = new Ext.form.TextField({
@@ -1257,7 +1259,8 @@ function selectRelativeTime() {
     allowBlank: true,
     regex: /^\d+$/,
     regexText: 'Please enter a number',
-    value: TimeRange.relativeUntilQuantity
+    value: TimeRange.relativeUntilQuantity,
+    // stripCharsRe  : new RegExp('[<>]', 'g') // TODO don't work, but a good way
   });
 
   var untilUnitField = new Ext.form.ComboBox({
@@ -1287,7 +1290,8 @@ function selectRelativeTime() {
                   Ext.getCmp('until-quantity-field').setDisabled(false);
                 }
               }
-    }
+    },
+    // stripCharsRe  : new RegExp('[<>]', 'g') // TODO don't work, but a good way
   });
 
 
@@ -1326,7 +1330,12 @@ function selectAbsoluteTime() {
   var startDateField = new Ext.form.DateField({
     fieldLabel: 'Start Date',
     width: 125,
-    value: TimeRange.startDate || ''
+    value: TimeRange.startDate || '',
+    listeners: {
+        render: function(cmp) {
+            cmp.getEl().update(cmp.getEl().dom.innerHTML, true);
+        }
+    }
   });
 
   var startTimeField = new Ext.form.TimeField({
@@ -1334,13 +1343,19 @@ function selectAbsoluteTime() {
     width: 125,
     allowBlank: false,
     increment: 30,
-    value: TimeRange.startTime || ''
+    value: TimeRange.startTime || '',
+    invalidText: 'bad start time',
   });
 
   var endDateField = new Ext.form.DateField({
     fieldLabel: 'End Date',
     width: 125,
-    value: TimeRange.endDate || ''
+    value: TimeRange.endDate || '',
+    listeners: {
+        render: function(cmp) {
+            cmp.getEl().update(cmp.getEl().dom.innerHTML, true);
+        }
+    }
   });
 
   var endTimeField = new Ext.form.TimeField({
@@ -1348,7 +1363,7 @@ function selectAbsoluteTime() {
     width: 125,
     allowBlank: false,
     increment: 30,
-    value: TimeRange.endTime || ''
+    value: TimeRange.endTime || '',
   });
 
   var win;
